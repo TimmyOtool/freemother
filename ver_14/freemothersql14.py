@@ -27,19 +27,19 @@ def totimestamp(dt, epoch=datetime.datetime(1970,1,1)):
 
 
 
-print "    #####"
-print "   # o o #"
-print "   # \_/ #"
-print "    #   #"
-print "   #     #"
-print "  #       #"
-print " #         #"
-print " #         #"
-print " #         #"
-print "  #       #"
-print "   #######"
-print "   "
-print "freemother 1.4a"
+print("    #####")
+print("   # o o #")
+print("   # \_/ #")
+print("    #   #")
+print("   #     #")
+print("  #       #")
+print(" #         #")
+print(" #         #")
+print(" #         #")
+print("  #       #")
+print("   #######")
+print("   ")
+print("freemother 1.4a")
 
 firmware=''
 serial=''
@@ -50,12 +50,12 @@ db_is_new = not os.path.exists(db_filename)
 
 with sqlite3.connect(db_filename) as conn:
     if db_is_new:
-        print 'Creation of the scheme...'
+        print('Creation of the scheme...')
         with open(schema_filename, 'rt') as f:
             schema = f.read()
         conn.executescript(schema)
     else:
-        print 'The database exists, it is assumed that the schema exists.'
+        print('The database exists, it is assumed that the schema exists.')
 #
 
 
@@ -63,17 +63,17 @@ with sqlite3.connect(db_filename) as conn:
 #HOST='192.168.0.1'
 #PORT=9001
 #HOST='192.168.1.159'
-PORT=9001
-HOST='192.168.177.19'
+PORT=80
+HOST='0.0.0.0'
 mac='MO0004A3F9XXXX'
 
 if HOST=='' or mac=='' or PORT==0:
-  print "please set HOST mac and PORT variables in the program..."
+  print("please set HOST mac and PORT variables in the program...")
   exit();
 else:
-  print "HOST ",HOST
-  print "PORT ",PORT
-  print "MOTHER ",mac  
+  print("HOST ",HOST)
+  print("PORT ",PORT)
+  print("MOTHER ",mac)
 
 cookieName=['one','two','three','four']
 cookieNode=['6FEC200D','AA81082C','206B121A','65EB0E1C']
@@ -136,7 +136,7 @@ def getCookies(client, server):
         i=i+1
         message=elenco+']}'
 #        message="RESPONSE"+elenco
-      print "response",message     
+      print("response",message)    
       server.send_message_to_all(message)
       
 def convData( d ):
@@ -150,7 +150,7 @@ def getHistory(client, server,n,f):
     with sqlite3.connect(db_filename) as conn:
       cursor = conn.cursor()
       query = """ select date_events, signal, val from cookies_events where node= :n and feed_type=:f order by date_events desc limit 10"""
-      print query
+      print(query)
       cursor.execute(query,{'n': n,'f':f})
       i=0
       elenco=''
@@ -165,7 +165,7 @@ def getHistory(client, server,n,f):
         i=i+1
         message=elenco+']}'
 #        message="RESPONSE"+elenco
-      print "response",message     
+      print("response",message)
       if message!='':
         server.send_message_to_all(message)
         
@@ -174,8 +174,8 @@ def getFirmware(client,server):
       global serial
       elenco='{"resource" : "command", "method":"post", "type": "firmware", "body" : [{"firmware":"'+firmware+'","serial":"'+serial+'"}'
       message=elenco+']}'
-      print "send info firmware" #(e)
-      print message
+      print("send info firmware") #(e)
+      print(message)
       if message!='':
         server.send_message_to_all(message)
 
@@ -185,7 +185,7 @@ def getInfo(client, server,n):
     with sqlite3.connect(db_filename) as conn:
       cursor = conn.cursor()
       query = """ select max(date_events), signal, val from cookies_events where node= :n and feed_type='5' """
-      print query
+      print(query)
       cursor.execute(query,{'n': n})
       i=0
       elenco=''
@@ -197,16 +197,16 @@ def getInfo(client, server,n):
           elenco='{"resource" : "command", "method":"post", "type": "info", "body" : [{"node":"'+n+'","date":"'+convData(de)+'","signal":"'+signal+'","value":"'+val+'","feed_type":"5"}'
         message=elenco+']}'
       except TypeError as e:
-        print "no feed_type 5" #(e)
+        print("no feed_type 5") #(e)
       if message!='':
         server.send_message_to_all(message)
         
-      print "response 5",message     
-      print "-"      
-      print "-"      
-      print "-"      
+      print("response 5",message)   
+      print("-")     
+      print("-")     
+      print("-")     
       query = """ select max(date_events), signal, val from cookies_events where node= :n and feed_type='4' """
-      print query,n
+      print(query,n)
       cursor.execute(query,{'n': n})
       i=0
       elenco=''
@@ -218,12 +218,12 @@ def getInfo(client, server,n):
           elenco='{"resource" : "command", "method":"post", "type": "info", "body" : [{"node":"'+n+'","date":"'+convData(de)+'","signal":"'+signal+'","value":"'+val+'","feed_type":"4"}'
         message=elenco+']}'
       except TypeError as e:
-        print "no feed_type 4" #(e)
+        print("no feed_type 4") #(e)
       if message!='':
         server.send_message_to_all(message)
 
       query = """ select max(date_events), signal, val from cookies_events where node= :n and feed_type='3' """
-      print query
+      print(query)
       cursor.execute(query,{'n': n})
       i=0
       elenco=''
@@ -235,12 +235,12 @@ def getInfo(client, server,n):
           elenco='{"resource" : "command", "method":"post", "type": "info", "body" : [{"node":"'+n+'","date":"'+convData(de)+'","signal":"'+signal+'","value":"'+val+'","feed_type":"3"}'
         message=elenco+']}'
       except TypeError as e:
-        print "no feed_type 3" #(e)
+        print("no feed_type 3") #(e)
       if message!='':
         server.send_message_to_all(message)
         
       query = """ select max(date_events), signal, val from cookies_events where node= :n and feed_type='2' """
-      print query
+      print(query)
       cursor.execute(query,{'n': n})
       i=0
       elenco=''
@@ -252,7 +252,7 @@ def getInfo(client, server,n):
           elenco='{"resource" : "command", "method":"post", "type": "info", "body" : [{"node":"'+n+'","date":"'+convData(de)+'","signal":"'+signal+'","value":"'+val+'","feed_type":"2"}'
         message=elenco+']}'
       except TypeError as e:
-        print "no feed_type 2" #(e)
+        print("no feed_type 2") #(e)
       if message!='':
         server.send_message_to_all(message)
                 
@@ -349,7 +349,7 @@ def message_received(client, server, message):
     print("Client(%d) said: %s" % (client['id'], message))
     if client['id']!=1:
       print("send to Client(%d) " % (cl_mother['id']))
-      print "test ",message
+      print("test ",message)
       server.send_message(cl_mother, message)
       
     if client['id']!=1:
@@ -357,25 +357,25 @@ def message_received(client, server, message):
       try:
         cmd=j['resource']
       except KeyError:
-         print "no command"
+         print("no command")
       if cmd=='command':
          method=j['method']
          n=j['body']['node']
          t=j['type']
          if t=='name' and method=='get' and n=='all':
            getCookies( client, server )
-           print "******",method,n
+           print("******",method,n)
          if t=='info' and method=='get' and n!='all':
            getInfo( client, server, n )
-           print "leggo valori"
+           print("leggo valori")
          if t=='history' and method=='get' and n!='all':
            f=j['body']['feed_type']
            getHistory( client, server, n, f)
-           print "leggo la storia di ", f
+           print("leggo la storia di ", f)
          
          if t=='firmware' and method=='get':
            getFirmware( client, server )
-           print "******",method,n
+           print("******",method,n)
          
 
       
@@ -409,110 +409,98 @@ def message_received(client, server, message):
       
       
       
-       
-     
-
-
-
 
       
     #controlli
     if client['id']==1:
      #j = json.loads(message)
-     
-     
-     
-     
-     
+
      if j['resource']=='auth':
       firmware=j['body']['firmware']
       serial=j['body']['serial']
       print("firmware: %s" % firmware)
       print("serial: %s" % serial)
       print("Client(%d) " % (client['id']))
-      print "auth request"
+      print("auth request")
       fase=1
       server.send_message(client, msg_1)
-      print "SRV:",msg_1
+      print("SRV:",msg_1)
 
      if j['resource']=='login':
       print("Client(%d) " % (client['id']))
-      print "auth request 2"
+      print("auth request 2")
       fase=2
       server.send_message(client, msg_2)
-      print "SRV:",msg_2
+      print("SRV:",msg_2)
       
      if j['resource']=='registration':
       print("Client(%d) " % (client['id']))
-      print "auth request 3"
+      print("auth request 3")
       fase=3
       server.send_message(client, msg_3)
-      print "SRV:",msg_3
+      print("SRV:",msg_3)
       server.send_message(client, msg_3a)
-      print "SRV:",msg_3a
+      print("SRV:",msg_3a)
       
      if j['resource']=='planning':
       print("Client(%d) " % (client['id']))
-      print "auth request 4"
+      print("auth request 4")
       fase=4
       server.send_message(client, msg_4)
-      print "SRV:",msg_4
+      print("SRV:",msg_4)
       
      if j['resource']=='library/sound' and j['method']=='get' and j['body']['version']!='0':
       print("Client(%d) " % (client['id']))
-      print "auth request 6"
+      print("auth request 6")
       fase=5
       server.send_message(client, msg_6)
-      print "SRV:",msg_6          
+      print("SRV:",msg_6)     
 
      if j['resource']=='library/resident' and j['method']=='get' and j['body']['version']!='0':
       print("Client(%d) " % (client['id']))
-      print "auth request 5"
+      print("auth request 5")
       fase=6
       server.send_message(client, msg_5)
-      print "SRV:",msg_5        
+      print("SRV:",msg_5)  
 
      #reset !!
      if j['resource']=='library/resident' and j['method']=='get' and j['body']['version']=='0':
       print("Client(%d) " % (client['id']))
-      print "send url for reset resident"
+      print("send url for reset resident")
       fase=99
       server.send_message(client, msg_rst_resident)
-      print "SRV: reset"+msg_rst_resident
+      print("SRV: reset"+msg_rst_resident)
       
      if j['resource']=='library/sound' and j['method']=='get' and j['body']['version']=='0':
       print("Client(%d) " % (client['id']))
-      print "send url for reset"
+      print("send url for reset")
       fase=99
       server.send_message(client, msg_rst_sound)
-      print "SRV: reset sound"+msg_rst_sound
+      print("SRV: reset sound"+msg_rst_sound)
      
 
      #add 09-2018 and 05-2019
      if j['resource']=='time':
       if j['method']=='get':
-        print "response at time get width time set...."
+        print("response at time get width time set....")
         # set time        utcnow()
         now = datetime.datetime.now()
-        print now
+        print(now)
         ntptime = totimestamp(now)        
         msgSetTime ='{"body": '+str(ntptime)+', "resource": "time", "method": "post" }'        
         server.send_message(client, msgSetTime)
-        print "SRV: "+msgSetTime
+        print("SRV: "+msgSetTime)
         #server.send_message(client, msgup)
 
 
-
- 
-
      if j['resource']=='events':
       print("Client(%d) " % (client['id']))
-      print "events "
+      print("events ")
       node=''
       try:
         node=j['body'][0]['node']
       except KeyError:
-        print "no node"
+        print("no node")
       ## cerca il nodo tra i biscotti
       co=''
       idx=0
@@ -524,7 +512,7 @@ def message_received(client, server, message):
       if node!='':
       #if co!='':
         #print "cookie ", node, 
-        print "COOKIE: ",node
+        print("COOKIE: ",node)
         ft=j['body'][0]['feed_type']
         si=j['body'][0]['signal']
         va=j['body'][0]['value']
@@ -546,9 +534,9 @@ def message_received(client, server, message):
            newc=0
            for row in cursor.fetchall():
              nodo, nome = row
-             print '%s %s' % (nodo, nome)
+             print('%s %s' % (nodo, nome))
            if nodo=='':
-             print "insert new cookie"
+             print("insert new cookie")
             
              conn.execute(""" insert into cookies (node, name) values ('""" + node + """', 'biscotto!')""")
              conn.commit();
@@ -562,40 +550,38 @@ def message_received(client, server, message):
           if ft!='99' and ft !='1': #new events
            cursor.execute("insert into cookies_events (node, date_events, feed_type, signal, val ) values (?,?,?,?,?)",(node,tt,ft,si,va))
           #print time.strftime('%Y%m%d%H%M%S')
-    
-        
-        
+
         #tmp="_"+t+"_feed_=" + ft + "_signal_=" +si+ "_value_="+va
         tmp=t+";"+ft+";"+si+";"+va;
-        print tmp
+        print(tmp)
         #send to browser
         if cl0!='':
           server.send_message(cl0, "COOKIE"+chr(49+idx)+tmp)
 #          server.send_message(cl0, "COOKIE"+node+tmp)
         else:
-          print "not dbg redirection"
+          print("not dbg redirection")
                 
       if j['body'][0]['feed_type']=='6':
-        print "feed 6 "
+        print("feed 6 ")
         if j['body'][0]['value']>='5000' and sleep_state<2:
-           print "sleep fase 1"
+           print("sleep fase 1")
            sleep_state+=1
            if sleep_state==2:
-              print "sleep fase 2"
+              print("sleep fase 2")
               server.send_message(client, msgsleep)
         else:
            if sleep_state>1:
-              print "wake up "
+              print("wake up ")
               sleep_state=0
               server.send_message(client, msgwakeup)
       if j['body'][0]['feed_type']=='1' and j['body'][0]['value']=='1':
-        print "ping!? "
+        print("ping!? ")
         server.send_message(client, msgup)
           
       
 #PORT=80
 #HOST='192.168.0.1:8000'
-server = WebsocketServer(PORT,HOST,logging.INFO)
+server = WebsocketServer(host=HOST,port=PORT,loglevel=logging.INFO)
 server.set_fn_new_client(new_client)
 server.set_fn_client_left(client_left)
 server.set_fn_message_received(message_received)
